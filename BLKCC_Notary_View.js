@@ -36,7 +36,8 @@ export default class BLKCC_Notary_View {
     viewName = view.name;
     this.appViews[viewName] = view;
     this.viewOffsets[viewName] = viewOffset;
-    
+    view.setAttribute('disabled', 'true');
+
     if(viewName.slice(0, 3) !== 'reg') {continue;}
     let inp = view.input = view.querySelector('input, textarea');
     inp.addEventListener('change', ev => notary[viewName](inp));
@@ -75,12 +76,13 @@ export default class BLKCC_Notary_View {
   render(view) {
     if('curr' in this) {this.showView(this.curr, false);}
     this.showView(this.curr = view);
+    this.form.style.left = `-${this.viewOffsets[view]}00%`;
     if((view = `${view}Upd`) in this) {this[view]();}
     return this;
   }
   showView(viewName, show = true) {
-    if(show) {this.form.style.left = `-${this.viewOffsets[viewName]}00%`;}
     if(viewName in this.navTabs) {this.navTabs[viewName].classList[show ? 'add' : 'remove']('selected');}
+    this.appViews[viewName][`${show ? 'remove' : 'set'}Attribute`]('disabled', 'true');
   }
   showResult(res = 'Results') {
     this.appViews.results.innerHTML = res;

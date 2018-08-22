@@ -75,8 +75,8 @@ export default class BLKCC_Notary {
   });}
   
   async submitHash(hash) {
-    if(this.errorLocks.login) {return this.view.showResult('Not logged into <a href="https://metamask.io/" target="_blank">Metamask</a>');}
     if(await this.hashExists(hash)) {return;}
+    if(this.errorLocks.login) {return this.view.showResult('Not logged into <a href="https://metamask.io/" target="_blank">Metamask</a>');}
     this.contract.addRecord.sendTransaction(hash, {
       from: this.account,
       gas: this.gas,
