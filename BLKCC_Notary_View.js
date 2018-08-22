@@ -21,7 +21,10 @@ export default class BLKCC_Notary_View {
     }
     for(let field of this.details.querySelectorAll('div')) {this[field.classList[0]] = field.lastChild;}
 
-    this.form.addEventListener('submit', ev => {ev.preventDefault(); this.formSubmit(ev.explicitOriginalTarget.parentNode.name)});
+    this.form.addEventListener('submit', ev => {
+      ev.preventDefault();
+      this.formSubmit(this.form.querySelector(':focus').parentNode.name);
+    });
     this.appViews.regFile.input.addEventListener('change', this.fileInputChange);
     this.appViews.regText.input.addEventListener('keyup', this.inputChange);
     this.stats = this.form.querySelector('.statistics');    

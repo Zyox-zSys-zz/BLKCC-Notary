@@ -95,17 +95,13 @@ export default class BLKCC_Notary {
   }
   
   missingMetamask() {
-    if(typeof web3 !== 'undefined') {delete this.errorLocks.extension;}
-    else {
-      this.error(new Error('Metamask not installed'), 'extension');
-      return true;
-    }
-    if(web3.eth.accounts[0]) {delete this.errorLocks.login;}
-    else {
+    if(typeof web3 === 'undefined' || !web3.eth.accounts[0]) {
       this.error('Not logged into <a href="https://metamask.io/" target="_blank">Metamask</a>', 'login');
       return true;
+    } else {
+      delete this.errorLocks.login;
+      return false;
     }
-    return false;
   }
   
   updInfo() {
