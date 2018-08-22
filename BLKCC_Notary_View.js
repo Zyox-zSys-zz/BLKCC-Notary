@@ -8,34 +8,32 @@ export default class BLKCC_Notary_View {
   init(argObj = {}) {
     this.navTabs = {};
     this.appViews = {};
-    this.viewOffsets = {};
     Object.assign(this, argObj);
     this.container = document.querySelector(this.querySelector);
     
     for(let section of this.container.children) {this[section.tagName.toLowerCase()] = section;}
     this.nav = this.nav.querySelector('nav');
-    
+    this.initAppViews(this.form.children);
     for(let navTab of this.nav.children) {
       let navName = navTab.getAttribute('for');
       this.navTabs[navName] = navTab;
-      navTab.addEventListener('click', ev => notary.view.render(navName));
+      navTab.addEventListener('click', ev => this.render(this.appViews[navName]));
     }
     for(let field of this.details.querySelectorAll('div')) {this[field.classList[0]] = field.lastChild;}
-    
-    this.initAppViews(this.form.children);
+
     this.form.addEventListener('submit', ev => {ev.preventDefault(); this.formSubmit(ev.explicitOriginalTarget.parentNode.name)});
     this.appViews.regFile.input.addEventListener('change', this.fileInputChange);
     this.appViews.regText.input.addEventListener('keyup', this.inputChange);
     this.stats = this.form.querySelector('.statistics');    
     
-    return this.render('regFile');
+    return this.render(this.appViews.regFile);
   }
   
   initAppViews(appViews) {for(let viewOffset = 0, f = appViews.length; viewOffset < f; viewOffset++) {
     let view = appViews[viewOffset],
     viewName = view.name;
     this.appViews[viewName] = view;
-    this.viewOffsets[viewName] = viewOffset;
+    view.offset = viewOffset;
     view.setAttribute('disabled', 'true');
 
     if(viewName.slice(0, 3) !== 'reg') {continue;}
@@ -76,17 +74,18 @@ export default class BLKCC_Notary_View {
   render(view) {
     if('curr' in this) {this.showView(this.curr, false);}
     this.showView(this.curr = view);
-    this.form.style.left = `-${this.viewOffsets[view]}00%`;
-    if((view = `${view}Upd`) in this) {this[view]();}
+    this.form.style.left = `-${view.offset}00%`;
+    if((view = `${view.name}Upd`) in this) {this[view]();}
     return this;
   }
-  showView(viewName, show = true) {
-    if(viewName in this.navTabs) {this.navTabs[viewName].classList[show ? 'add' : 'remove']('selected');}
-    this.appViews[viewName][`${show ? 'remove' : 'set'}Attribute`]('disabled', 'true');
+  showView(view, show = true) {
+    if(view.name in this.navTabs) {this.navTabs[view.name].classList[show ? 'add' : 'remove']('selected');}
+    view[`${show ? 'remove' : 'set'}Attribute`]('disabled', 'true');
   }
+  
   showResult(res = 'Results') {
     this.appViews.results.innerHTML = res;
-    return this.render('results');
+    return this.render(this.appViews.results);
   }
   
   error(err) {
