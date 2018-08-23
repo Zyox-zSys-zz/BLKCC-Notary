@@ -4,9 +4,9 @@ export default class BLKCC_Notary {
 
   constructor(argObj = {}) {
     if(!(this instanceof BLKCC_Notary)) {return new BLKCC_Notary(argObj);}
-    document.readyState === 'complete'
-      ? this.init(argObj)
-      : window.addEventListener('load', () => this.init(argObj));
+    document.readyState === 'loading'
+    ? document.addEventListener("DOMContentLoaded", () => this.init(argObj))
+    : this.init(argObj);
   }
   
   init(argObj = {}) {
