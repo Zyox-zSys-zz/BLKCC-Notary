@@ -1,24 +1,50 @@
-/* Base */
+/* Base & config */
+
+.notary a:hover {color: #0f0;}
+.notary > nav label.selected {border-top-color: #f00;}
 
 .notary {
+
+  --bgHue: 240deg;
+  --bgSaturation: 100%;
+  --bgLightness: 14%;
+  --bgColor: hsl(var(--bgHue) var(--bgSaturation) var(--bgLightness));
+
+  --fontHue: 0deg;
+  --fontSaturation: 0%;
+  --fontLightness: 85%;
+  --fontColor: hsl(var(--fontHue) var(--fontSaturation) var(--fontLightness));
+
+  --titleLightness: 100%;
+  --titleColor: hsl(var(--fontHue) var(--fontSaturation) var(--titleLightness));
+
+  --highlightLightness: 40%;
+  --highlightBg: hsl(var(--bgHue), var(--bgSaturation), var(--highlightLightness), 30%);
+  --highlightBorder: hsl(var(--bgHue), var(--bgSaturation), var(--highlightLightness), 60%);
+
+  --darkenSaturation: 30%;
+  --darkenBg: hsl(var(--bgHue), var(--darkenSaturation), var(--bgLightness), 60%);
+
+  color: var(--fontColor);
   height: 100%;
   visibility: visible;
   overflow-x: hidden;
-  color: #ddd;
-  background: #004 linear-gradient(to bottom, #00d 0%, #0040 1%, #0040 99%, #00d 100%);
+  background-color: var(--bgColor);
+  background-image: linear-gradient(to top, var(--titleColor) 0%, #2220 5px);
   /*background-attachment: local;*/
   font-family: sans-serif, Helvetica, Arial;
+
 }
+.notary, .notary > nav > header {background-blend-mode: color-dodge;}
 .notary * {
   box-sizing: border-box;
   transition: none 300ms ease-out;
 }
 .notary > * {width: 100%;}
 .notary a {
-  color: #fff;
+  color: var(--titleColor);
   transition-property: color;
 }
-.notary a:hover {color: #0f0;}
 
 .notary button,
 .notary .btn,
@@ -28,9 +54,9 @@
   min-height: 2em;
   line-height: 2em;
   border-radius: 0.5rem;
-  border: 1px solid #11a;
+  border: 1px solid var(--highlightBorder);
   color: inherit;
-  background: #007;
+  background: var(--highlightBg);
 }
 .notary button,
 .notary .btn,
@@ -42,9 +68,9 @@
 .notary button:hover,
 .notary .btn:hover,
 .notary input[placeholder="hash"]:active {
-  color: #fff;
-  border-color: #fff;
-  box-shadow: inset 0 0 0 1.5em #2224;
+  color: var(--titleColor);
+  border-color: var(--titleColor);
+  box-shadow: inset 0 0 0 1.5em var(--darkenBg);
 }
 .notary input[placeholder="hash"]:active {transition-duration: 100ms;}
 .notary input[type="file"] {display: none;}
@@ -71,39 +97,52 @@
 
 .notary > nav > header {
   flex: 1 0 16rem;
-  color: #fff;
-  font-size:1.5rem;
+  background-color: var(--bgColor);
+  background-image: linear-gradient(to bottom, var(--titleColor) 0%, #2220 5px);
+  color: var(--titleColor);
+  font-size: 1.5rem;
   font-weight: 1000;
-  text-shadow: 0px 0px 10px #00d;
+  text-shadow: 0px 0px 10px var(--highlightBorder);
 }
 .notary > nav > header::before {
   content: url("ethLogo.png");
   margin-right: 0.5rem;
-  filter: drop-shadow(0px 0px 10px #00d);
+  filter: drop-shadow(0px 0px 10px var(--highlightBorder));
 }
 
 .notary > nav > nav {flex: 999 0 auto;}
 .notary > nav label {
+  position: relative;
   flex: 1 1 auto;
   padding: 0.15rem;
-  background: #007;
-  border: 1px solid #00a;
+  border: 2px solid var(--highlightBorder);
   border-radius: 0.3rem 0.3rem 0 0;
   white-space: nowrap;
   cursor: pointer;
+  z-index: 0;
 }
+.notary > nav label::before  {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: var(--highlightBg);
+  z-index: -1;
+}
+
 .notary > nav label.selected {
-  font-weight: 600;
-  color: #fff;
-  background-color: #004;
+  background-color: var(--bgColor);
+  color: var(--titleColor);
   border-top-color: #f00;
   border-bottom: none;
+  font-weight: 600;
   cursor: default;
   transition-property: color, border-top;
 }
+
+.notary > nav label:not(.selected)::before {content: '';}
 .notary > nav label:not(.selected):hover {
-  color: #fff;
-  background: #009;
+  background-color: var(--highlightBg);
+  color: var(--titleColor);
   transition-property: color, background;
 }
 
@@ -116,16 +155,16 @@
   font-size: 0.9rem;
 }
 .notary > details > summary {
-  color: #bbb;
+  color: hsl(var(--fontHue) var(--fontSaturation) 75%);
   cursor: pointer;
   transition-property: color;
 }
-.notary > details > summary:hover {color: #fff;}
+.notary > details > summary:hover {color: var(--titleColor);}
 .notary > details > div {word-break: break-all;}
 .notary > details > div > label {
   font-family: Courier New;
   font-weight: bold;
-  text-shadow: 0px 0px 10px #00a;
+  text-shadow: 0px 0px 10px var(--highlightBg);
 }
 .notary > details > div > label::after {content: ': ';}
 
